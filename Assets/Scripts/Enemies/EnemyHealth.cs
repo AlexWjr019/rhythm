@@ -5,7 +5,10 @@ using UnityEngine;
 public class EnemyHealth : MonoBehaviour
 {
     [SerializeField]
-    float dmg;
+    public float dmg;
+
+    [SerializeField]
+    int points;
 
     public float maxHealth = 100;
     public float currentHealth;
@@ -22,30 +25,23 @@ public class EnemyHealth : MonoBehaviour
     {
         if (currentHealth <= 0)
         {
+            ScoreManager.Instance.AddPoint(points);
+            AudioManager.Instance.Play("Destroy");
             Destroy(gameObject);
-        }
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("Player Bullet"))
-        {
-            if (Conductor.Instance.lessDmgOn)
-            {
-                Destroy(gameObject);
-            }
-            else if (Conductor.Instance.fullDmgOn)
-            {
-                Destroy(gameObject);
-            }
         }
     }
 
     public void Damage(float damage)
     {
-        Debug.Log(damage);
-        currentHealth -= damage;
-        Conductor.Instance.lessDmgOn = false;
-        Conductor.Instance.fullDmgOn = false;
+        if (Conductor.Instance.lessDmgOn && !Conductor.Instance.fullDmgOn)
+        {
+            currentHealth -= damage / 2;
+            healthBar.SetHealth(currentHealth);
+        }
+        else if (!Conductor.Instance.lessDmgOn && Conductor.Instance.fullDmgOn)
+        {
+            currentHealth -= damage;
+            healthBar.SetHealth(currentHealth);
+        }
     }
 }

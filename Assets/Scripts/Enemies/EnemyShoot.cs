@@ -18,9 +18,10 @@ public class EnemyShoot : MonoBehaviour
         while (true)
         {
             GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+            bullet.GetComponent<Bullet>().isEnemy = true;
             bullet.GetComponent<Rigidbody2D>().AddForce(firePoint.up * fireForce, ForceMode2D.Impulse);
 
-            //AudioManager.Instance.Play("Gunshot");
+            AudioManager.Instance.Play("Blaster");
 
             yield return new WaitForSeconds(2);
         }

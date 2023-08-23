@@ -7,7 +7,14 @@ public class AudioManager : MonoBehaviour
 {
     public Sound[] sounds;
 
+    [SerializeField]
+    public string bgmName;
+
+    public AudioSource musicSource;
+
     public static AudioManager Instance;
+
+    bool isPlayed;
 
     void Awake()
     {
@@ -15,11 +22,16 @@ public class AudioManager : MonoBehaviour
 
         foreach (Sound s in sounds)
         {
-            //s.source = gameObject.AddComponent<AudioSource>();
             s.source.clip = s.clip;
             s.source.volume = s.volume;
             s.source.pitch = s.pitch;
             s.source.loop = s.loop;
+        }
+
+        if (!isPlayed)
+        {
+            PlayBGM(bgmName);
+            isPlayed = true;
         }
     }
 
@@ -30,13 +42,11 @@ public class AudioManager : MonoBehaviour
         s.source.PlayOneShot(s.clip);
     }
 
-    public void Select()
+    public void PlayBGM(string bgmName)
     {
-        Play("Select");
-    }
-
-    public void Cancel()
-    {
-        Play("Cancel");
+        musicSource.Stop();
+        Sound s = Array.Find(sounds, sound => sound.name == bgmName);
+        musicSource.clip = s.clip;
+        musicSource.Play();
     }
 }

@@ -12,6 +12,9 @@ public class PlayerShoot : MonoBehaviour
     Transform firePoint;
 
     [SerializeField]
+    private float fireForce;
+
+    [SerializeField]
     bool canFire;
     [SerializeField]
     float firingDelay;
@@ -38,6 +41,10 @@ public class PlayerShoot : MonoBehaviour
     public void Shoot()
     {
         canFire = false;
-        Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+
+        AudioManager.Instance.Play("Blaster");
+
+        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+        bullet.GetComponent<Rigidbody2D>().AddForce(firePoint.up * fireForce, ForceMode2D.Impulse);
     }
 }

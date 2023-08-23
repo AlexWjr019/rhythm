@@ -9,6 +9,8 @@ public class HealthBar : MonoBehaviour
     public Slider slider;
     public TMP_Text healthText;
 
+    public EnemyHealth enemyHealth;
+
     public PlayerHealth health;
 
     public void Start()
